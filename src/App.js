@@ -1,4 +1,5 @@
 // Flexible Compound Components with context
+// 💯 custom hook validation
 
 import * as React from 'react';
 import { Switch } from './switch';
@@ -18,7 +19,11 @@ function Toggle({ children }) {
 }
 
 function useToggle() {
-  return React.useContext(ToggleContext);
+  const context = React.useContext(ToggleContext);
+  if (context === undefined) {
+    throw new Error('useToggle must be used within a <Toggle />');
+  }
+  return context;
 }
 
 function ToggleOn({ children }) {
@@ -35,6 +40,8 @@ function ToggleButton({ ...props }) {
   const { on, toggle } = useToggle();
   return <Switch on={on} onClick={toggle} {...props} />;
 }
+
+// const App = () => <ToggleButton />;
 
 function App() {
   return (
